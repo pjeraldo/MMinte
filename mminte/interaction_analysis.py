@@ -4,8 +4,8 @@ import pandas as pd
 from multiprocessing import Pool, cpu_count
 from warnings import warn
 from cobra.io import load_json_model, save_json_model
-from mackinac import get_modelseed_model_stats, reconstruct_modelseed_model, gapfill_modelseed_model, \
-    create_cobra_model_from_modelseed_model, delete_modelseed_model
+from mackinac import get_patric_model_stats, create_patric_model, \
+    create_cobra_model_from_patric_model, delete_patric_model
 from mackinac.SeedClient import ObjectNotFoundError
 
 from .interaction_worker import growth_rate_columns, create_pair_model, compute_growth_rates
@@ -62,20 +62,20 @@ def create_species_models(genome_ids, output_folder, replace=False, optimize=Fal
         else:
             reconstruct = False
             try:
-                get_modelseed_model_stats(genome_id)
+                get_patric_model_stats(genome_id)
                 if replace:
-                    delete_modelseed_model(genome_id)
+                    delete_patric_model(genome_id)
                     reconstruct = True
             except ObjectNotFoundError:
                 reconstruct = True
 
             # If needed, reconstruct and gap fill a model from the genome.
             if reconstruct:
-                reconstruct_modelseed_model(genome_id)
-                gapfill_modelseed_model(genome_id)
+                create_patric_model(genome_id, model_id= genome_id)
+                #gapfill_modelseed_model(genome_id)
 
             # Create a COBRA model and save in JSON format.
-            model = create_cobra_model_from_modelseed_model(genome_id)
+            model = create_cobra_model_from_patric_model(genome_id)
             save_json_model(model, model_filename)
             output_models.append(model_filename)
 
