@@ -17,7 +17,7 @@ if cobra06:
 
 
 # Regular expression for compartment suffix on ModelSEED IDs
-modelseed_suffix_re = re.compile(r'_([ce])$')
+modelseed_suffix_re = re.compile(r'_([crglmnrxe])$')
 
 # Regular expression for compartment suffix on BiGG IDs
 bigg_suffix_re = re.compile(r'\[([cepu])\]$')
